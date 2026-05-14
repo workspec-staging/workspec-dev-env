@@ -1,0 +1,8 @@
+app = "workspec-dev-env-smoke"
+primary_region = "syd"
+
+[build]
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"
