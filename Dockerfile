@@ -24,9 +24,9 @@ RUN curl -fsSL https://packages.microsoft.com/config/ubuntu/24.04/packages-micro
     && apt-get install -y dotnet-sdk-10.0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Aspire CLI as a .NET global tool
-RUN dotnet tool install -g aspire
-ENV PATH="$PATH:/root/.dotnet/tools"
+# Aspire CLI standalone binary
+RUN curl -sSL https://aspire.dev/install.sh | bash
+ENV PATH="$PATH:/root/.aspire/bin"
 
 # Claude Code CLI
 RUN npm install -g @anthropic-ai/claude-code
