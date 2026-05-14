@@ -10,12 +10,8 @@ echo "Cloning $REPO_URL..."
 git clone "$REPO_URL" /workspace/project
 
 cd /workspace/project
-echo "Running aspire restore..."
-aspire restore
-echo "Running aspire run..."
-exec env \
-  WORKSPEC=true \
-  ASPNETCORE_URLS="http://localhost:17300" \
-  ASPIRE_DASHBOARD_OTLP_HTTP_ENDPOINT_URL="http://localhost:18901" \
-  ASPIRE_ALLOW_UNSECURED_TRANSPORT="true" \
-  aspire run
+echo "Installing dependencies..."
+pnpm install
+echo "Starting Vite..."
+cd artifacts/web
+exec pnpm exec vite --config vite.workspec.config.ts
