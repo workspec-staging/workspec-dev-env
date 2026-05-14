@@ -6,3 +6,4 @@ primary_region = "syd"
 [[vm]]
   size = "shared-cpu-1x"
   memory = "1gb"
+  count = 1
