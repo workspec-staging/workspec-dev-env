@@ -28,6 +28,9 @@ RUN curl -fsSL https://packages.microsoft.com/config/ubuntu/24.04/packages-micro
 RUN curl -sSL https://aspire.dev/install.sh | bash
 ENV PATH="$PATH:/root/.aspire/bin"
 
+# pnpm via corepack (required by Aspire.Hosting.JavaScript restore)
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
 # Claude Code CLI
 RUN npm install -g @anthropic-ai/claude-code
 
