@@ -11,4 +11,4 @@ git clone "$REPO_URL" /workspace/project
 
 cd /workspace/project
 echo "Running aspire run..."
-exec aspire run
+exec env WORKSPEC=true aspire run
