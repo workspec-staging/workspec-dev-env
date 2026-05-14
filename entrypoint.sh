@@ -13,4 +13,9 @@ cd /workspace/project
 echo "Running aspire restore..."
 aspire restore
 echo "Running aspire run..."
-exec env WORKSPEC=true aspire run --launch-profile workstation
+exec env \
+  WORKSPEC=true \
+  ASPNETCORE_URLS="http://localhost:17300" \
+  ASPIRE_DASHBOARD_OTLP_HTTP_ENDPOINT_URL="http://localhost:18901" \
+  ASPIRE_ALLOW_UNSECURED_TRANSPORT="true" \
+  aspire run
