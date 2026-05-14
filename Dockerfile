@@ -31,6 +31,16 @@ ENV PATH="$PATH:/root/.aspire/bin"
 # Claude Code CLI
 RUN npm install -g @anthropic-ai/claude-code
 
+# Pre-cache Aspire NuGet packages so first-boot restore is instant.
+# Versions must match fullstack-typescript-project/aspire.config.json.
+RUN mkdir -p /tmp/aspire-warm && \
+    printf '{"appHost":{"path":"apphost.ts","language":"typescript/nodejs"},"sdk":{"version":"13.2.0"},"packages":{"Aspire.Hosting.JavaScript":"13.2.0"},"profiles":{}}' \
+        > /tmp/aspire-warm/aspire.config.json && \
+    printf 'import { createBuilder } from "./.modules/aspire.js"; const b = await createBuilder(); await b.build().run();' \
+        > /tmp/aspire-warm/apphost.ts && \
+    cd /tmp/aspire-warm && aspire restore && \
+    rm -rf /tmp/aspire-warm
+
 WORKDIR /workspace
 
 COPY entrypoint.sh /entrypoint.sh

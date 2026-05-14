@@ -10,5 +10,7 @@ echo "Cloning $REPO_URL..."
 git clone "$REPO_URL" /workspace/project
 
 cd /workspace/project
+echo "Running aspire restore..."
+aspire restore
 echo "Running aspire run..."
 exec env WORKSPEC=true aspire run --launch-profile workstation
