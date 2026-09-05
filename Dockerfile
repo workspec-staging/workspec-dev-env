@@ -29,7 +29,8 @@ RUN curl -sSL https://aspire.dev/install.sh | bash
 ENV PATH="$PATH:/root/.aspire/bin"
 
 # pnpm via corepack (required by Aspire.Hosting.JavaScript restore)
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Pin version to match local dev where onlyBuiltDependencies fix is verified
+RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
 
 # Claude Code CLI
 RUN npm install -g @anthropic-ai/claude-code
@@ -45,6 +46,11 @@ RUN mkdir -p /tmp/aspire-warm && \
     rm -rf /tmp/aspire-warm
 
 WORKDIR /workspace
+
+# Workspace agent — gRPC server that exposes file CRUD, Claude Code task
+# execution, and git operations to the WorkSpec platform.
+COPY agent/ /app/agent/
+RUN cd /app/agent && npm install --production
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

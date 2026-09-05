@@ -1,14 +1,43 @@
-app = "workspec-dev-env-smoke"
+app = "synthesis"
 primary_region = "syd"
 
 [build]
 
-[http_service]
+# HTTP — Vite dev server (what developers see in the browser)
+[[services]]
   internal_port = 8080
-  force_https = true
+  protocol = "tcp"
   auto_stop_machines = "stop"
   auto_start_machines = true
   min_machines_running = 0
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+    force_https = true
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+# gRPC — workspace-agent (called by WorkSpec platform on Digital Ocean)
+[[services]]
+  internal_port = 3001
+  protocol = "tcp"
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 50051
+
+# Persistent volume — survives machine restarts, holds the git clone
+# and Claude Code session state (.claude/ directory)
+[[mounts]]
+  source = "workspace_data"
+  destination = "/workspace"
+  initial_size = "10gb"
 
 [[vm]]
   size = "shared-cpu-1x"
